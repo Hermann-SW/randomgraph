@@ -1,0 +1,40 @@
+
+GRAPH algorithms
+================
+
+make
+
+Should build the program  randomgraph.
+
+The graph file format is that of the LEDA package from the MPI Saarbruecken,
+Germany, of Prof. K. Mehlhorn.
+The whole ugraph.h package is motivated by that packages datatype
+UGRAPH; the difference are plain ANSI-C instead C++, fewer bug ( :-) ) and
+more features!
+
+randomgraph
+===========
+
+randomgraph                    --> gives short intro
+randomgraph 10 -s 12345 -o t.u --> generates random maximal planar graph in
+                                   file t.u with random generator seed 12345
+
+Real random graph (seed is epoch time):
+
+$ time ./randomgraph 1000000 -o t.u -s `date +%s`
+
+-------------------------------------
+malloc: 18   malloc-free: 0
+
+real	0m3.220s
+user	0m3.042s
+sys	0m0.176s
+s
+
+
+Have a  lot of fun,
+
+   Hermann Stamm-Wilbrandt.
+
+P.S.: Any comments, bug reports, ... welcome!
+
