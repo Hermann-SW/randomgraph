@@ -1,0 +1,329 @@
+
+#ifndef def_ugraph_def
+#define def_ugraph_def
+
+#include <memory.h>
+
+/*
+#include <stdarg.h>
+*/
+
+#define EOAL 1234567891
+
+#define F_0(F)		((num (*)(num,...)) (F)),EOAL
+#define F_1(F,A)	((num (*)(num,...)) (F)),((num) (A)),EOAL
+#define F_2(F,A,B)	((num (*)(num,...)) (F)),((num) (A)),((num) (B)),EOAL
+
+#include "set.h"
+#include "list.h"
+
+typedef num    edge;
+typedef num    vertex;
+typedef vertex *array_of_vertex;
+typedef edge   *array_of_edge;
+
+typedef num    *set_of_vertex;
+typedef num    *set_of_edge;
+
+typedef list   list_of_vertex;
+typedef list   list_of_edge;
+
+
+typedef double *edge_array_of_double;
+typedef num    *edge_array;
+typedef double *vertex_array_of_double;
+typedef num    *vertex_array;
+
+
+/*----------------------------------------------------------------------------*/
+
+#define SUCC(e,v,G) ((_(G,__source)[e]==v) ? _(G,_Ssucc)[e] : _(G,_Tsucc)[e])
+#define PRED(e,v,G) ((_(G,__source)[e]==v) ? _(G,_Spred)[e] : _(G,_Tpred)[e])
+
+#define SUCC_(e,v,G) (((_(G,__source)[e]==v) ? &_(G,_Ssucc)[e] : &_(G,_Tsucc)[e]))
+#define PRED_(e,v,G) (((_(G,__source)[e]==v) ? &_(G,_Spred)[e] : &_(G,_Tpred)[e]))
+
+#define OPPOSITE(v,e,G)	((_(G,__source)[e]==v) ? _(G,__target)[e] :	\
+			 (_(G,__target)[e]==v) ? _(G,__source)[e] : 0 )
+
+
+#define forall_vertices(v,G) 						\
+	for(v=_(G,_first_vertex)(); v!=0; v=_(G,_succ_vertex)(v))
+
+#define forall_edges(e,G)						\
+	for(e=_(G,_first_edge)(); e!=0; e=_(G,_succ_edge)(e))
+
+#define forall_incident_edges(e,v,G)					\
+	for(e=_(G,_first_incident_edge)(v); e!=0; e=_(G,_incident_succ)(e,v))
+
+#define forall_adjacent_vertices(w,v,G)					\
+	for(_(G,_it)[v]=_(G,_first_incident_edge)(v), 			\
+	    w=OPPOSITE(v,_(G,_it)[v],G); 				\
+	    _(G,_it)[v]!=0;						\
+	    _(G,_it)[v]=_(G,_incident_succ)(_(G,_it)[v],v), 		\
+	    w=OPPOSITE(v,_(G,_it)[v],G))
+
+
+#define Apply_forall_edges(e,G,Block) { edge e; forall_edges(e,G) {Block} }
+
+#define Apply_forall_vertices(v,G,Block) {vertex v; forall_vertices(v,G){Block}}
+
+#define Apply_forall_incident_edges(e,v,G,Block) \
+  { edge e; forall_incident_edges(e,v,G) {Block} }
+
+#define Apply_forall_adjacent_vertices(w,v,G,Block) \
+  { vertex w; forall_adjacent_vertices(w,v,G) {Block} }
+
+
+#define UGRAPH_ASSIGN(D,S)	 					\
+  { 									\
+  _(D,_vertices)	= _(S,_vertices);  				\
+  _(D,_edges)		= _(S,_edges); 					\
+  _(D,__max_vertices)	= _(S,__max_vertices);  			\
+  _(D,__max_edges)	= _(S,__max_edges); 				\
+  _(D,__vertices_sofar)	= _(S,__vertices_sofar); 			\
+  _(D,__edges_sofar)	= _(S,__edges_sofar); 				\
+  _(D,__source) 	= _(S,__source); 				\
+  _(D,__target) 	= _(S,__target); 				\
+  _(D,_Ssucc)   	= _(S,_Ssucc); 					\
+  _(D,_Spred)   	= _(S,_Spred);  				\
+  _(D,_Tsucc)   	= _(S,_Tsucc);  				\
+  _(D,_Tpred)   	= _(S,_Tpred);  				\
+  _(D,_Esucc)   	= _(S,_Esucc); 					\
+  _(D,_Epred)   	= _(S,_Epred); 					\
+ 									\
+  _(D,_Vsucc)   	= _(S,_Vsucc); 					\
+  _(D,_Vpred)   	= _(S,_Vpred); 					\
+  _(D,__degree) 	= _(S,__degree); 				\
+  _(D,_first)   	= _(S,_first); 					\
+  _(D,_last)    	= _(S,_last); 					\
+  _(D,_it)      	= _(S,_it); 					\
+  }
+
+
+
+
+#define UGRAPH_PROTO(N)							\
+UGRAPH_PROTO11(N)							\
+UGRAPH_PROTO11a(N)							\
+UGRAPH_PROTO12(N)							\
+UGRAPH_PROTO13(N)							\
+
+
+#define UGRAPH_PROTO11(N)						\
+									\
+extern num _(N,_vertices),_(N,_edges);					\
+extern num _(N,__max_vertices),_(N,__max_edges);			\
+extern num _(N,__vertices_sofar),_(N,__edges_sofar);			\
+									\
+extern array_of_vertex _(N,__source);					\
+extern array_of_vertex _(N,__target);					\
+								\
+extern array_of_edge _(N,_Ssucc);					\
+extern array_of_edge _(N,_Spred);					\
+									\
+extern array_of_edge _(N,_Tsucc);					\
+extern array_of_edge _(N,_Tpred);					\
+									\
+extern array_of_edge _(N,_Esucc);					\
+extern array_of_edge _(N,_Epred);					\
+									\
+extern array_of_edge _(N,_first);					\
+extern array_of_edge _(N,_last);					\
+									\
+									\
+extern array_of_vertex _(N,_Vsucc);					\
+extern array_of_vertex _(N,_Vpred);					\
+									\
+extern array_of_edge _(N,_it);						\
+								\
+extern array_of_num _(N,__degree);					\
+									\
+vertex _(N,_first_vertex)(void);					\
+vertex _(N,_succ_vertex)(vertex v);					\
+edge   _(N,_first_incident_edge)(vertex v);				\
+edge   _(N,_incident_succ)(edge e, vertex v);				\
+vertex _(N,_first_edge)(void);						\
+vertex _(N,_succ_edge)(edge e);						\
+									\
+									\
+edge_array_of_double _(N,_new_edge_array_of_double)();			\
+									\
+void _(N,_delete_edge_array_of_double)(edge_array_of_double A); 	\
+									\
+edge_array _(N,_new_edge_array)();					\
+									\
+void _(N,_delete_edge_array)(edge_array A); 				\
+									\
+vertex_array_of_double _(N,_new_vertex_array_of_double)();		\
+									\
+void _(N,_delete_vertex_array_of_double)(vertex_array_of_double A); 	\
+									\
+vertex_array _(N,_new_vertex_array)();					\
+									\
+void _(N,_delete_vertex_array)(vertex_array A); 			\
+									\
+void _(N,_init_vertex_array)(vertex_array A, num x);			\
+									\
+void _(N,_init_edge_array)(edge_array A, num x);			\
+									\
+
+/*
+void _(N,_init_edge_array_by_function)(edge_array A, num (*f)(edge,...),...);\
+									\
+*/
+
+
+#define UGRAPH_PROTO11a(N)						\
+									\
+									\
+num  _(N,_vertices_sofar)();						\
+num  _(N,_vertices_max)();						\
+									\
+num  _(N,_edges_sofar)();						\
+num  _(N,_edges_max)();							\
+									\
+void _(N,_resize_copy)(num **p, int n, int k);				\
+									\
+void _(N,_resize)(num n, num m);					\
+									\
+void _(N,_compress_vertices)(void (*CV)(vertex,vertex));		\
+									\
+void _(N,_compress_edges)(void (*CE)(edge,edge));			\
+									\
+void _(N,_compress)(void (*CV)(vertex,vertex),void (*CE)(edge,edge));	\
+									\
+void _(N,_new)(num n, num m); 						\
+ 									\
+void _(N,_delete)(); 							\
+									\
+
+
+#define UGRAPH_PROTO12(N)							\
+num  _(N,_degree)(vertex v);						\
+									\
+vertex _(N,_source)(edge e);						\
+edge _(N,_target)(edge e);						\
+									\
+vertex _(N,_opposite)(vertex v, edge e);				\
+									\
+num  _(N,_number_of_vertices)();					\
+num  _(N,_number_of_edges)();						\
+									\
+vertex _(N,_first_vertex)();						\
+vertex _(N,_last_vertex)();						\
+vertex _(N,_succ_vertex)(vertex v);					\
+vertex _(N,_pred_vertex)(vertex v);					\
+									\
+set_of_vertex _(N,_all_vertices)();					\
+		          						\
+edge _(N,_first_edge)();						\
+edge _(N,_last_edge)();							\
+edge _(N,_succ_edge)(edge e);						\
+edge _(N,_pred_edge)(edge e);						\
+									\
+set_of_edge _(N,_all_edges)();						\
+									\
+edge _(N,_first_incident_edge)(vertex v);				\
+									\
+edge _(N,_last_incident_edge)(vertex v);				\
+									\
+edge _(N,_incident_succ)(edge e, vertex v);				\
+									\
+edge _(N,_incident_pred)(edge e, vertex v);				\
+									\
+edge _(N,_cyclic_incident_succ)(edge e, vertex v);			\
+									\
+edge _(N,_cyclic_incident_pred)(edge e, vertex v);			\
+									\
+set_of_edge _(N,_incident_edges)(vertex v);				\
+									\
+set_of_vertex _(N,_adjacent_vertices)(vertex v);			\
+									\
+vertex _(N,_choose_vertex)();						\
+edge _(N,_choose_edge)();						\
+									\
+									\
+									\
+void _(N,_app_edges)(edge g);						\
+									\
+void _(N,_ins_edge)(edge g, vertex u, edge e, bool diru);		\
+									\
+edge _(N,_old_edge2)(vertex u, vertex v, edge g, edge e, edge f, 	\
+		     bool diru, bool dirv); 				\
+									\
+edge _(N,_new_edge2)(vertex u, vertex v, edge e, edge f, bool diru, bool dirv); \
+									\
+edge _(N,_new_edge)(vertex u, vertex v);					\
+									\
+void _(N,_rem_edge)(edge v);						\
+									\
+void _(N,_remove_edge_)(edge e, vertex v);				\
+									\
+edge _(N,_remove_edge1)(edge e, vertex v);				\
+									\
+edge _(N,_remove_edge)(edge e);						\
+									\
+void _(N,_delete_edge)(edge e);						\
+									\
+void _(N,_re_ins_edge)(edge e);						\
+									\
+void _(N,_old_edge_)(edge e, vertex v);					\
+									\
+void _(N,_old_edge1)(edge e, vertex v);					\
+									\
+void _(N,_old_edge)(edge e);						\
+									\
+void _(N,_app_vertices)(vertex g);					\
+ 									\
+vertex _(N,_new_vertex)();						\
+									\
+void _(N,_rem_vertex)(vertex v)	;					\
+									\
+vertex _(N,_remove_vertex)(vertex v);					\
+									\
+void _(N,_delete_vertex)(vertex v);					\
+									\
+void _(N,_ins_vertex)(vertex v);					\
+									\
+void _(N,_old_vertex)(vertex v);					\
+									\
+void _(N,_move_edge)(edge e, vertex v, edge f, bool dir);		\
+
+
+#define UGRAPH_PROTO13(N)							\
+void _(N,_bucket_sort_edges)(int a, int b, edge_array M);		\
+									\
+									\
+void _(N,_bucket_sort_vertices)(int a, int b, vertex_array M);		\
+									\
+									\
+bool _(N,_SAME)(edge e, edge f); 					\
+									\
+bool _(N,_simple)();							\
+									\
+void _(N,_eliminate_parallel_edges_and_self_loops)();			\
+									\
+									\
+void _(N,_read)(char *fname);						\
+									\
+void _(N,_readP)(char *fname, void (*IV)(int), void (*IE)(int),		\
+		void (*RV)(vertex,char *), void (*RE)(edge,char *));	\
+									\
+void _(N,_read_simple)(char *fname);					\
+									\
+void _(N,_write)(char *fname);						\
+									\
+void _(N,_writeP)(char *fname, char * (*WV)(vertex), char * (*WE)(edge));\
+									\
+void _(N,_print_vertex)(vertex v);					\
+									\
+void _(N,_print_edge)(edge e);						\
+									\
+void _(N,_print)();							\
+									\
+void _(N,_use)();							\
+
+		
+#endif
+
