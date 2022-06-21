@@ -38,3 +38,32 @@ Have a  lot of fun,
 
 P.S.: Any comments, bug reports, ... welcome!
 
+
+Really 1994 code:
+
+$ ls -lst
+total 160
+ 4 -rw-rw-r-- 1 stammw stammw  1080 Jun 21 20:14 LICENSE
+ 4 -rw-r--r-- 1 stammw stammw   880 Jun 21 20:05 README
+ 4 -rw-r--r-- 1 stammw stammw  1347 Jun 21 20:00 Makefile
+ 4 -rw-r--r-- 1 stammw stammw   994 Nov 13  1997 array.h
+ 4 -rw-r--r-- 1 stammw stammw  1735 Feb 14  1996 basic.h
+12 -rw-r--r-- 1 stammw stammw 10593 Feb 10  1996 randomgraph.c
+ 4 -rw-r--r-- 1 stammw stammw  2724 Dec 17  1994 is_embedding.c
+ 4 -rw-r--r-- 1 stammw stammw   264 Dec 17  1994 is_embedding.h
+16 -rw-r--r-- 1 stammw stammw 12939 Dec 13  1994 list.c
+ 8 -rw-r--r-- 1 stammw stammw  7330 Dec 13  1994 list.h
+ 4 -rw-r--r-- 1 stammw stammw  2008 Dec 13  1994 set.c
+12 -rw-r--r-- 1 stammw stammw  9297 Dec 13  1994 ugraph.def
+40 -rw-r--r-- 1 stammw stammw 36950 Dec 13  1994 ugraph.h
+ 4 -rw-r--r-- 1 stammw stammw  2147 Nov 28  1994 array.c
+ 4 -rw-r--r-- 1 stammw stammw  2119 Nov 11  1994 randomgrapho.c
+ 4 -rw-r--r-- 1 stammw stammw  3807 Sep 13  1994 triangulate.c
+ 4 -rw-r--r-- 1 stammw stammw   171 Jun 13  1994 randomgrapho.h
+ 4 -rw-r--r-- 1 stammw stammw    35 Apr 15  1994 triangulate.h
+ 4 -rw-r--r-- 1 stammw stammw  1517 Apr 15  1994 set.h
+ 4 -rw-r--r-- 1 stammw stammw  1401 Mar 17  1994 basic.c
+ 4 -rw-r--r-- 1 stammw stammw  2669 Mar  2  1994 b_urn.h
+ 4 -rw-r--r-- 1 stammw stammw  1186 Mar  2  1994 b_stack.c
+ 4 -rw-r--r-- 1 stammw stammw   902 Mar  2  1994 b_stack.h
+$ 
