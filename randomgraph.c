@@ -350,7 +350,7 @@ int main(int argc, char *argv[])
   bool nonplanar=false;
   char fname[100];
 
-  if (argc<2)  err_handler(3,"Format: randomgraph n [-t type] [-o file.[u/bit/bit8]] \
+  if (argc<2)  err_handler(3,"Format: randomgraph n [-t type] [-o file.[u/bit/bit8/a]] \
 [-s seed] [-no] [-r edges] [-n]\
 ( type in {cubic,cubic_Halin,maximal_planar,dual_of_cubic_Halin} ) ");
 
@@ -430,7 +430,35 @@ int main(int argc, char *argv[])
   else
     {
     if (strlen(fname)>0)  
+      if (! strstr(fname, ".a"))
         G_write(fname);
+      else
+	{
+          FILE *target = fopen(fname,"w");
+	  vertex v;
+          edge e;
+
+          if (! is_embedding()) {
+            err_handler(77,"not an embedding");
+          }
+
+	  (void) fprintf(target, "[");
+          forall_vertices(v, G) {
+            if (v != G_first_vertex()) {
+              (void) fprintf(target, ",");
+            }
+            (void) fprintf(target, "[");
+	    forall_incident_edges(e, v, G) {
+              if (e != G_first_incident_edge(v)) {
+                (void) fprintf(target, ",");
+              }
+              (void) fprintf(target, "%d", G_opposite(v, e)-1);
+            }
+            (void) fprintf(target, "]");
+          }
+	  (void) fprintf(target, "]\n");
+	  (void) fclose(target);
+	}
     }
 
   G_delete();
