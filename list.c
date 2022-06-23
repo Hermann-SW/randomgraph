@@ -20,6 +20,8 @@
 
 #include "list.h"
 
+num TOPIT,TOPITH,TOPITH1;
+
 num uni_aux;
 
 num *_U_;

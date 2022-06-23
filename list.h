@@ -86,7 +86,7 @@
 #define FREEEL _U_[4]
 #define FREESZ _U_[5]
 
-num TOPIT,TOPITH,TOPITH1;
+extern num TOPIT,TOPITH,TOPITH1;
 
 #define IS_NUM(X)     (_T_(X)==t_num)
 #define IS_LIST(X)    (_T_(X)==t_list)
